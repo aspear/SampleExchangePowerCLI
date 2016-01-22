@@ -3,10 +3,7 @@
 Copyright 2016 VMware Inc.  All Rights Reserved.
 
 This file is released as open source under the terms of the 
-BSD 3-Clause license:
-under the terms of the BSD 3-clause license:
-https://opensource.org/licenses/BSD-3-Clause
-
+BSD 3-Clause license: https://opensource.org/licenses/BSD-3-Clause
 
 .SYNOPSIS
 Add VMware Sample Exchange PowerShell samples as PowerShell ISE snippets
@@ -26,6 +23,8 @@ $sxServerBaseUrl = "https://vdc-repo.vmware.com/sampleExchange/rest"
 
 # URL to fetch only PowerShell samples
 $powerShellSamplesUrl= $sxServerBaseUrl + "/search/tag/category/Language/name/PowerShell"
+
+ $webClient = New-Object System.Net.WebClient
 
 
 # Utility to convert HTML to text since it seems that the snippet display in ISE cannot handle
@@ -82,7 +81,53 @@ function Html-ToText {
 }
 
 
-function RegisterSampleAsISESnippet( $sample ) {
+function Get-SampleExchangeSamples() {
+    $samples = Invoke-RestMethod -Method Get -Uri $powerShellSamplesUrl
+    return $samples
+}
+
+function Get-SampleExchangeSampleById( $sampleId ) {
+    <# 
+    .SYNOPSIS Get one particular sample by id
+    #>
+    $url = $sxServerBaseUrl + "/search/" + $sampleId
+    $sample = Invoke-RestMethod -Method Get -Uri $url
+    return $sample
+}
+
+function Get-SampleExchangeSampleBody( $sample ) {
+    
+    # A sample in Sample Exchange can have multiple files, but 
+    # it doesn't really make sense to add these sorts of samples as 
+    # snippets since we don't have a way of knowing which file is the 'right' 
+    # one to grab.  So, we only add snippets for samples that have a single file
+
+    if (!($sample.files.Count -eq 1)) {
+        "SKIPPING http://developercenter.vmware.com/samples?id={0:D} '{1}'. It has multiple files." -f $sample.id, $sample.name
+        return ''
+    }
+
+    # TODO additional validation of the sample?
+    
+    # there is only one file add this one
+    "GETTING   http://developercenter.vmware.com/samples?id={0:D} '{1}'" -f $sample.id, $sample.name
+            
+    foreach ($file in $sample.files) {
+        $fileNameOnly = [io.path]::GetFileName($file.path)
+        if ($fileNameOnly.EndsWith('.ps1')) {
+            
+            #$localFilePath = '{0}\{1}' -f $downloadDir, $fileNameOnly
+	        #'    downloading id={0:5} {1} to {2}' -f $file.id, $fileNameOnly, $localFilePath
+            $fileUrl = '{0}/downloads/sampleFile/{1}' -f $sxServerBaseUrl, $file.id
+            
+            $sampleFileBody = $webClient.DownloadString( $fileUrl )
+            return $sampleFileBody           
+        }
+    }     
+}
+
+
+function Add-SampleAsISESnippet( $sample ) {
     
     # A sample in Sample Exchange can have multiple files, but 
     # it doesn't really make sense to add these sorts of samples as 
@@ -137,16 +182,18 @@ function Add-SampleExchangeSnippets() {
        
     process{ 
         # make web service call to fetch the list of samples
-        $samples = Invoke-RestMethod -Method Get -Uri $powerShellSamplesUrl
-        $webClient = New-Object System.Net.WebClient
+        $samples = Get-SampleExchangeSamples
                
         foreach ($sample in $samples) {
-            RegisterSampleAsISESnippet $sample    
+            Add-SampleAsISESnippet $sample    
         }  
 
         "Snippets were added to {0}{1}\Documents\WindowsPowerShell\Snippets" -f $env:HOMEDRIVE, $env:HOMEPATH
     }
 }
 
-Add-SampleExchangeSnippets
+#  Call this line to add all samples
+
+#$s = Get-SampleExchangeSampleById 871
+#SampleExchangeSampleBody $s
 
