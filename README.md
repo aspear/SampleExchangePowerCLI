@@ -1,77 +1,54 @@
-# PowerCLITools Community Module
+# SampleExchangePowerCLI Module
 
-PowerCLITools provides additional functions via a PowerShell module to use with PowerCLI from VMware.
-
-It is formed from a set of functions that I have built up over time from consulting experiences in the field and essentially plugs a few gaps in the coverage of PowerCLI.
+A PowerShell Module that contains integration between [VMware's new sample code repository Sample Exchange](developercenter.vmware.com/samples), and various
+ PowerShell ISE.  Sample Exchange contains an ever growing catalog of PowerCLI samples and snippets, and this module uses Sample Exchange REST
+ web services to allow a user to paste sample code into their editors directly in PowerShell ISE.
 
 **Pre-Requisites**
 
 PowerShell version 4 or later.
 
-Ensure that VMware PowerCLI is installed. Functions have been tested against v5.8 R1.
-
-
 **Installation**
 
+1) Download (or clone) all files comprising the module.
 
-1) Download all files comprising the module. **Ensure the files are unblocked**.
+2) Create a folder for the module in your module folder path, e.g. C:\Users\username\Documents\WindowsPowerShell\Modules\SampleExchangePowerCLI
 
-2) Create a folder for the module in your module folder path, e.g. C:\Users\username\Documents\WindowsPowerShell\Modules\PowerCLITools
+3) Place the module files in the above folder.  The SampleExchangePowerCLI.psd1 file should be in the root of the folder with the "functions" subdirectory below that contains all of the various functions.
 
-3) Place the module files in the above folder
+NOTE: If you create the folder in the path above, then PowerShell ISE (and regular PowerShell windows) will load the module.  
+ If you don't want to do this, you can manually install the module by running the command
 
-
+ PS C:\> Import-Module -Force -Verbose C:\work\PowerShell\sample-exchange-powercli\SampleExchangePowerCLI
+ 
+ where sample-exchange-powercli was the directory where the files where extracted.
+ 
+ 4) Restart PowerShell ISE
+ 
+ 5) Go to "Add-ons" > "Sample Exchange" > "Sync Snippets"
+ 
+ This command is the equivilent of calling the "Sync-SampleExchangeSnippetsWithISE" method directly.  It downloads all samples and registers them as "Snippets" 
+ in PowerShell ISE thus making them available for use in the editor when you issue the "CTRL + J" hot-key.
+ 
 **Usage**
 
-The below command will make all of the functions in the module available
+If you follow the steps above and restart PowerShell ISE you should see a "Sample Exchange" menu show up with a "Sync Snippets" and "Search Samples" commands.  
+"Sync Snippets" is mentioned above in the installation steps.
 
-Import-Module PowerCLITools
+*** Search Samples ***
+"Search Samples" will pop up a dialog box which lists all available PowerShell language samples by default.  You can additionally enter a search term and
+ click the "Search" button to additionally filter the list.
+ 
+ Select any sample from the list and click the "Insert in Editor" button to insert the given sample code at the location of the cursor in the editor that had
+ focus when the dialog was opened (yes, it doesn't work to select another editor after the dialog is opened, sorry).
+ 
+ If you click "OK" the sample content is pasted in the shell.  "Cancel" simply closes the window.
+
 
 To see a list of available functions:
 
-Get-Command -Module PowerCLITools
+Get-Command -Module SampleExchangePowerCLI
 
-                         
-Add-vCenterLicense            
-Get-ClusterAverageCpuMemory   
-Get-CurrentVIServer           
-Get-SnapshotCreator           
-Get-vCenterLicense            
-Get-VMCreationDate            
-Get-VMDiskData                
-Get-VMHostAlarm               
-Get-VMHostDumpCollector       
-Get-VMHostiSCSIBinding        
-Get-VMHostLicense             
-Get-VMHostNetworkAdapterCDP   
-Get-VMHostSyslogConfig        
-Get-VMIPAddressFromNetwork    
-Get-VMSCSIID                  
-Install-vSphereClient         
-Install-vSpherePowerCLI       
-New-vCenterPermission         
-New-vCenterRole               
-New-VMFromSnapshot            
-Remove-vCenterLicense         
-Set-VMHostDumpCollector       
-Set-VMHostiSCSIBinding        
-Set-VMHostLicense             
-Set-VMHostSyslogConfig        
-Set-VMHostToCurrentDateandTime
-Test-VIServerConnection       
-Update-ESXiSSL                
-Update-VMNotesWithOwner       
-Update-VMScsiDeviceOrder
-
+                      
 
 **Nested Modules**
-
-You will note that each function is itself a nested module of the PowerCLITools module. In this [blog post](www.jonathanmedd.net/2013/11/powercli-in-the-enterprise-breaking-the-magicians-code-function-templates.html) I describe why I make my modules like this.
-
-
-
-
-**VI Properties**
-
-If you take a look inside the PowerCLITools.Initialise.ps1 file you'll notice a number of VI Properties. Some of these are required by some of the functions in the module and some are just there for my convenience and make using my PowerCLI session simpler. You can add and remove VI Properties as to your own personal preference, but watch out that some are actually needed.  You can find out more about VI Properties [here](http://blogs.vmware.com/PowerCLI/2011/08/ability-to-customize-vi-objects.html).
-
