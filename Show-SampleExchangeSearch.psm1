@@ -145,7 +145,7 @@ function Show-SampleExchangeSearch() {
     if ($result -eq [System.Windows.Forms.DialogResult]::OK -and $objListBox.SelectedIndex -ge 0)
     {
         $selection = $objListBox.SelectedItem
-        $selection
+        #$selection
 
         $selectedSample = $samples.Get($objListBox.SelectedIndex)
 

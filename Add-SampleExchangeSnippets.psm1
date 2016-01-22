@@ -110,7 +110,7 @@ function Get-SampleExchangeSampleBody( $sample ) {
     # TODO additional validation of the sample?
     
     # there is only one file add this one
-    "GETTING   http://developercenter.vmware.com/samples?id={0:D} '{1}'" -f $sample.id, $sample.name
+    #"GETTING   http://developercenter.vmware.com/samples?id={0:D} '{1}'" -f $sample.id, $sample.name
             
     foreach ($file in $sample.files) {
         $fileNameOnly = [io.path]::GetFileName($file.path)
