@@ -424,3 +424,26 @@ function Show-SampleExchangeSearch() {
          $sampleBody
     }
 }
+
+function Remove-SampleExchangePowerShellISEAddonsMenu() {
+    if ($psISE) {  
+	    #$psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("ClearMenu",  
+        #     { $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Clear() }, $null)
+        $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Clear()
+	}
+}
+
+function Add-SampleExchangePowerShellISEAddonsMenu() {
+<# Method that only has to be executed once at module startup in order to add the menu items
+for sample exchange to PowerShell ISE #>   
+    if ($psISE) { 	    
+        "Adding Sample Exchange commands to PowerShell ISE Add-Ons menu."	
+		$SampleExchangeMenu = $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add( 
+		   "VMware Sample Exchange",$null,$null) 
+		$SampleExchangeMenu.SubMenus.Add("Sync Snippets", { Sync-SampleExchangeSnippetsWithISE } ,$null)
+		$SampleExchangeMenu.SubMenus.Add("Search Samples", { Show-SampleExchangeSearch } , "Ctrl+Shift+s") 
+	}
+}
+
+# Call at module init in order to add to PowerShell ISE
+Add-SampleExchangePowerShellISEAddonsMenu
