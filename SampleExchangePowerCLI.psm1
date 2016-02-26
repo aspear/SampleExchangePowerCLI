@@ -399,7 +399,9 @@ function Show-SampleExchangeSearch() {
     $samples = Get-SampleExchangeSamples
 
      foreach ($sample in $samples) {
-         [void] $objListBox.Items.Add($sample.name) 
+         if ( $sample.name ) {
+						[void] $objListBox.Items.Add($sample.name) 
+				 }
      }
 
     $objForm.Controls.Add($objListBox) 
