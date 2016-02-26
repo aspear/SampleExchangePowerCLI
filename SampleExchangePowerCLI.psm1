@@ -149,7 +149,7 @@ function Set-Clipboard {
 $sxServerBaseUrl = "https://vdc-repo.vmware.com/sampleExchange/rest"
 
 # URL to fetch only PowerShell samples
-$powerShellSamplesUrl= $sxServerBaseUrl + "/search/tag/category/Language/name/PowerShell"
+$powerShellSamplesUrl= $sxServerBaseUrl + "/search/samples/tag/category/Language/name/PowerShell"
 
 function Get-SampleExchangeSamples() {
 	<#
