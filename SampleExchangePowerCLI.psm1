@@ -172,7 +172,7 @@ function Get-SampleExchangeSampleById( $sampleId ) {
     .INPUTS sampleId - integer sample id	
 	.OUTPUT Sample object
     #>
-    $url = $sxServerBaseUrl + "/search/" + $sampleId
+    $url = $sxServerBaseUrl + "/search/samples/" + $sampleId
     $sample = Invoke-RestMethod -Method Get -Uri $url
     return $sample
 }
