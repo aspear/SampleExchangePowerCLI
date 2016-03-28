@@ -146,7 +146,7 @@ function Set-Clipboard {
 }
 
 # Base URL for Sample Exchange REST services
-$sxServerBaseUrl = "https://vdc-repo.vmware.com/sampleExchange/rest"
+$sxServerBaseUrl = "https://vdc-repo.vmware.com/sampleExchange/v1"
 
 # URL to fetch only PowerShell samples
 $powerShellSamplesUrl= $sxServerBaseUrl + "/search/samples/tag/category/Language/name/PowerShell"
