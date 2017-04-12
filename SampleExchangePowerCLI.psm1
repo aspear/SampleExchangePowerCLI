@@ -151,7 +151,7 @@ $sxServerBaseUrl = "https://vdc-repo.vmware.com/sampleExchange/v1"
 # URL to fetch only PowerShell samples
 $powerShellSamplesUrl= $sxServerBaseUrl + "/search/samples/tag/category/Language/name/PowerShell"
 
-function Get-SampleExchangeSamples() {
+function Get-SampleExchangeSample($ID) {
 	<#
 	.SYNOPSIS Call Sample Exchange Web services to get all PowerShell language samples
 	
@@ -162,19 +162,14 @@ function Get-SampleExchangeSamples() {
     
 	# Sample Exchange web services return a list of samples in JSON.  Happily Invoke-RestMethod
 	# automatically translates this into .NET objects for us so we can seamlessly access the samples
-	$samples = Invoke-RestMethod -Method Get -Uri $powerShellSamplesUrl
-    return $samples
-}
-
-function Get-SampleExchangeSampleById( $sampleId ) {
-    <# 
-    .SYNOPSIS Get one particular sample by integer id
-    .INPUTS sampleId - integer sample id	
-	.OUTPUT Sample object
-    #>
-    $url = $sxServerBaseUrl + "/search/samples/" + $sampleId
-    $sample = Invoke-RestMethod -Method Get -Uri $url
-    return $sample
+	if ($ID) {
+        $url = $sxServerBaseUrl + "/search/samples/" + $Id
+        $sample = Invoke-RestMethod -Method Get -Uri $url
+        return $sample
+    } Else {
+        $samples = Invoke-RestMethod -Method Get -Uri $powerShellSamplesUrl
+        return $samples
+    }
 }
 
 function Get-SampleExchangeSampleBody( $sample ) {
@@ -249,7 +244,7 @@ function Sync-SampleExchangeSnippetsWithISE() {
        
     process{ 
         # make web service call to fetch the list of samples
-        $samples = Get-SampleExchangeSamples
+        $samples = Get-SampleExchangeSample
                
         foreach ($sample in $samples) {
 				   
@@ -376,7 +371,7 @@ function Show-SampleExchangeSearch() {
         $searchText = $searchTextBox.Text.Trim()
 
         # FIXME implement a real search here using a service call
-        $samples = Get-SampleExchangeSamples
+        $samples = Get-SampleExchangeSample
 
          foreach ($sample in $samples) {        
         
