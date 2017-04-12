@@ -5,7 +5,7 @@ This file is released as open source under the terms of the
 BSD 3-Clause license: https://opensource.org/licenses/BSD-3-Clause
 Please feel free to do something creative with it!
 
-.AUTHOR Aaron Spear, Alan Renouf, VMware Inc.
+.AUTHOR Aaron Spear, VMware Inc.
 
 .SYNOPSIS
 VMware Sample Exchange PowerShell/PowerCLI integration
