@@ -166,7 +166,7 @@ function Get-SampleExchangeSample($ID) {
         $url = $sxServerBaseUrl + "/search/samples/" + $Id
         $sample = Invoke-RestMethod -Method Get -Uri $url
         return $sample
-    } Else {
+    } else {
         $samples = Invoke-RestMethod -Method Get -Uri $powerShellSamplesUrl
         return $samples
     }
@@ -391,7 +391,7 @@ function Show-SampleExchangeSearch() {
     $objListBox.Size = New-Object System.Drawing.Size(560,20) 
     $objListBox.Height = 289
 
-    $samples = Get-SampleExchangeSamples
+    $samples = Get-SampleExchangeSample
 
      foreach ($sample in $samples) {
          if ( $sample.name ) {
